@@ -614,18 +614,6 @@ export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
 		const { bucket } = env;
 
-		if (
-			request.method !== 'OPTIONS' &&
-			request.headers.get('Authorization') !== `Basic ${btoa(`${env.USERNAME}:${env.PASSWORD}`)}`
-		) {
-			return new Response('Unauthorized', {
-				status: 401,
-				headers: {
-					'WWW-Authenticate': 'Basic realm="webdav"',
-				},
-			});
-		}
-
 		let response: Response = await dispatch_handler(request, bucket);
 
 		// Set CORS headers
