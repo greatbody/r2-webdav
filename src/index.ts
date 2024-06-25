@@ -87,7 +87,7 @@ function fromR2Object(object: R2Object | null | undefined): DavProperties {
 }
 
 function make_resource_path(request: Request): string {
-	let path = new URL(request.url).pathname.slice(1);
+	let path = decodeURIComponent(new URL(request.url).pathname.slice(1));
 	path = path.endsWith('/') ? path.slice(0, -1) : path;
 	return path;
 }
@@ -111,7 +111,7 @@ async function handle_get(request: Request, bucket: R2Bucket): Promise<Response>
 			if (object.key === resource_path) {
 				continue;
 			}
-			let href = `/${encodeURIComponent(object.key + (object.customMetadata?.resourcetype === '<collection />' ? '/' : ''))}`;
+			let href = `/${object.key + (object.customMetadata?.resourcetype === '<collection />' ? '/' : '')}`;
 			page += `<a href="${href}">${object.httpMetadata?.contentDisposition ?? object.key}</a><br>`;
 		}
 		return new Response(page, {
