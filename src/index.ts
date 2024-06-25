@@ -111,7 +111,7 @@ async function handle_get(request: Request, bucket: R2Bucket): Promise<Response>
 			if (object.key === resource_path) {
 				continue;
 			}
-			let href = `/${object.key + (object.customMetadata?.resourcetype === '<collection />' ? '/' : '')}`;
+			let href = `/${encodeURIComponent(object.key + (object.customMetadata?.resourcetype === '<collection />' ? '/' : ''))}`;
 			page += `<a href="${href}">${object.httpMetadata?.contentDisposition ?? object.key}</a><br>`;
 		}
 		return new Response(page, {
